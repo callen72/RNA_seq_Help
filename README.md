@@ -100,6 +100,13 @@ Skipping './WTair2_Output/raw_data/WTair2_S2_R1_001.fastq.gz' which didn't exist
 /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>fastqc -o ./output ./WTair2_Output/raw_data/WTair2_S2_R1_001.fastq.gz
 Skipping './WTair2_Output/raw_data/WTair2_S2_R1_001.fastq.gz' which didn't exist, or couldn't be read
 
+RESTART AGAIN!!!!
+will be following e_coli steps
+/e_coli>ls
+analysis  raw_data
+
+1_fastqc       3_fastqc  5_samtools  7_abyss
+2_trimmomatic  4_bwa     6_snpEff    8_quast
 
 
 
