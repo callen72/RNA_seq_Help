@@ -223,6 +223,9 @@ Index genome using bwa - Burrows-Wheeler Alignment Tool
 6803genome.fa.ann  geneannotation.gff3.fa  WTeth1_S4_R1_001.fastq
 6803genome.fa.bwt  WTair1_S1_R1_001.fastq  WTeth2_S7_R1_001.fastq
 
-
-
+rmdir 4_bwa
+mkdir 4_bowtie
+ln -s /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic/WTair2_S2_R1_001.fastq.trimmed.fq .
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic>ln -s /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic/WTair2_S2_R1_001.fastq.trimmed.fq .
+ln: creating symbolic link `./WTair2_S2_R1_001.fastq.trimmed.fq': File exists
 
