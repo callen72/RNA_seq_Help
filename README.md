@@ -225,7 +225,51 @@ Index genome using bwa - Burrows-Wheeler Alignment Tool
 
 rmdir 4_bwa
 mkdir 4_bowtie
-ln -s /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic/WTair2_S2_R1_001.fastq.trimmed.fq .
-/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic>ln -s /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic/WTair2_S2_R1_001.fastq.trimmed.fq .
-ln: creating symbolic link `./WTair2_S2_R1_001.fastq.trimmed.fq': File exists
+ln -s /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic/WTair2_S2_R1_001.fastq.trimmed.fastq . (Run for each WT..trimmed)
+ln -s /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data/geneannotations.gff3 .
+
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>ls
+geneannotations.gff3                  WTeth1_S4_R1_001.fastq.trimmed.fastq
+WTair2_S2_R1_001.fastq.trimmed.fastq  WTeth2_S7_R1_001.fastq.trimmed.fastq
+WTair3_S3_R1_001.fastq.trimmed.fastq  WTeth3_S8_R1_001.fastq.trimmed.fastq
+
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>cp /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data/6803genome.fa .
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>ls
+6803genome.fa                         WTeth1_S4_R1_001.fastq.trimmed.fastq
+geneannotations.gff3                  WTeth2_S7_R1_001.fastq.trimmed.fastq
+WTair2_S2_R1_001.fastq.trimmed.fastq  WTeth3_S8_R1_001.fastq.trimmed.fastq
+WTair3_S3_R1_001.fastq.trimmed.fastq
+
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>module load bowtie2
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>bowtie2-build 6803genome.fa 6803_genome
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>ls
+6803_genome.1.bt2      geneannotations.gff3
+6803_genome.2.bt2      WTair2_S2_R1_001.fastq.trimmed.fastq
+6803_genome.3.bt2      WTair3_S3_R1_001.fastq.trimmed.fastq
+6803_genome.4.bt2      WTeth1_S4_R1_001.fastq.trimmed.fastq
+6803genome.fa          WTeth2_S7_R1_001.fastq.trimmed.fastq
+6803_genome.rev.1.bt2  WTeth3_S8_R1_001.fastq.trimmed.fastq
+6803_genome.rev.2.bt2
+
+MAPPING script map.qsh
+#$ -N Mapping
+#$ -cwd
+#$ -q medium*
+#$ -pe threads 8
+module load tophat
+module load bowtie2
+tophat -p 1 -o WTair2_Folder -G geneannotations.gff3 \
+--transcriptome-index ./gene_index/gene \
+6803_genome \
+WTair2_S2_R1_001.fastq.trimmed.fq \
+>& WTair2_Results
+
+
+
+
+
+
+
+
+
 
