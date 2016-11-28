@@ -4,11 +4,34 @@ cd /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data>ls
 analysis  raw_data 
 I used WinSCP to load the RNA-Seq data into the raw_data file
-Reference genome:
-Curl
-“ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000009725.1_ASM972v1/GCF_000009725.1_ASM972v1_genomic.fna.gz” > 6803genome.fa.gz
-GFF File:
-Curl “ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000009725.1_ASM972v1/GCF_000009725.1_ASM972v1_genomic.gff.gz” > geneannotation.gff3
+/lustre/projects/RNA_Seq_Data/RNA_Seq_Data>ls
+ WTair1_S1_R1_001.fastq     WTair3_S3_R1_001.fastq.gz  WTeth2_S7_R1_001.fastq.gz
+ WTair2_S2_R1_001.fastq.gz  WTeth1_S4_R1_001.fastq.gz  WTeth3_S8_R1_001.fastq.gz
+ /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>curl ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000009725.1_ASM972v1/GCF_000009725.1_ASM972v1_genomic.fna.gz > 6803genome.fa.gz
+ 
+ /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>ls
+ 6803genome.fa.gz           WTair3_S3_R1_001.fastq.gz  WTeth3_S8_R1_001.fastq.gz
+ WTair1_S1_R1_001.fastq     WTeth1_S4_R1_001.fastq.gz
+ WTair2_S2_R1_001.fastq.gz  WTeth2_S7_R1_001.fastq.gz
+ /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>curl ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCF_000009725.1_ASM972v1/GCF_000009725.1_ASM972v1_genomic.gff.gz > geneannotation.gff3.fa.gz
+ 
+ /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>ls
+ 6803genome.fa.gz           WTair2_S2_R1_001.fastq.gz  WTeth2_S7_R1_001.fastq.gz
+ geneannotation.gff3.fa.gz  WTair3_S3_R1_001.fastq.gz  WTeth3_S8_R1_001.fastq.gz
+ WTair1_S1_R1_001.fastq     WTeth1_S4_R1_001.fastq.gz
+ /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>gunzip 6803genome.fa.gz
+ /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>ls
+ 6803genome.fa              WTair2_S2_R1_001.fastq.gz  WTeth2_S7_R1_001.fastq.gz
+ geneannotation.gff3.fa.gz  WTair3_S3_R1_001.fastq.gz  WTeth3_S8_R1_001.fastq.gz
+ WTair1_S1_R1_001.fastq     WTeth1_S4_R1_001.fastq.gz
+ /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>gunzip geneannotation.gff3.fa.gz
+ /lustre/projects/RNA_Seq_Data/RNA_Seq_Data>ls
+ 6803genome.fa           WTair2_S2_R1_001.fastq.gz  WTeth2_S7_R1_001.fastq.gz
+ geneannotation.gff3.fa  WTair3_S3_R1_001.fastq.gz  WTeth3_S8_R1_001.fastq.gz
+ WTair1_S1_R1_001.fastq  WTeth1_S4_R1_001.fastq.gz
+ 
+
+
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data>ls -l
 total 25816116
 -rwxrwxr-x 1 callen72 users    3996723 Nov 10 09:41 6803genome.fa
@@ -312,7 +335,7 @@ lrwxrwxrwx 1 callen72 users   77 Nov 21 19:50 geneannotation.gff3.fa -> /lustre/
 -rw-r--r-- 1 callen72 users 5.5G Nov 21 22:42 New_WTeth3_sorted_byName.sam
 
 
-htseq-count -s no -t gene -i ID New_WTair2_sorted_byName.sam geneannotation.gff3.fa > New_WTair2_counts.txt 
+htseq-count -s no -t gene -i Name New_WTair2_sorted_byName.sam geneannotation.gff3.fa > New_WTair2_counts2.txt 
 (run script for each .sam file)
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/5_htseq>ls -lh
 total 34G
