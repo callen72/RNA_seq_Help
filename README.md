@@ -4,7 +4,6 @@ cd /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data>ls
 analysis  raw_data 
 I used WinSCP to load the RNA-Seq data into the raw_data file
-wget “http://ncbi.nlm.nih.gov/genomes/all/GCF_000009725.1_ASM972v1/GCF_000009725.1_ASM972v1_genomic.gff.gz” > geneannotation.gff3
 
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data>ls -l
 total 25816116
