@@ -392,6 +392,8 @@ rld <- rlog(my_data, blind=FALSE)
 The PCA plot was produced by:
 plotPCA(rld)
 
+-REDID MY HTSEQ COUNT TO SHOW THE NAME INSTEAD OF THE GENE ID.
+
 
 
 
