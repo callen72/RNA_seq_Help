@@ -43,6 +43,20 @@ total 25816116
 -rwxrwxr-x 1 callen72 users 4147069520 Sep 19 10:56 WTeth2_S7_R1_001.fastq
 -rwxrwxr-x 1 callen72 users 4326615469 Sep 19 10:59 WTeth3_S8_R1_001.fastq
 
+
+For the first fastqc run: 
+fastqc -o . /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data/WTair1_S1_R1_001.fastq
+
+Failed to process file WTair1_S1_R1_001.fastq
+uk.ac.babraham.FastQC.Sequence.SequenceFormatException: Ran out of data in the middle of a fastq entry.  Your file is probably truncated
+        at uk.ac.babraham.FastQC.Sequence.FastQFile.readNext(FastQFile.java:179)
+        at uk.ac.babraham.FastQC.Sequence.FastQFile.next(FastQFile.java:125)
+        at uk.ac.babraham.FastQC.Analysis.AnalysisRunner.run(AnalysisRunner.java:76)
+        at java.lang.Thread.run(Thread.java:745)
+
+qrsh -pe threads 8 -l mem=10G
+mkdir 2_trimmomatic
+cd 2_trimmomatic
 Trimming scritp in trim.qsh (run script for each WT...fastq file)
 #$ -N trim
 #$ -cwd
@@ -59,21 +73,49 @@ SE \
 WTair2_S2_R1_001.fastq.trimmed.fq \
 ILLUMINACLIP:/data/apps/trimmomatic/0.36/adapters/TruSeq3-SE.fa:2:30:10 \
 SLIDINGWINDOW:4:15 MINLEN:75
+(Will take a while to trim wait til trim.e file says completed successfully)
 
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic>ls
-Log_Files  trims                              WTair3_S3_R1_001.fastq.trimmed.fq  WTeth2_S7_R1_001.fastq.trimmed.fq
-trim.qsh   WTair2_S2_R1_001.fastq.trimmed.fq  WTeth1_S4_R1_001.fastq.trimmed.fq  WTeth3_S8_R1_001.fastq.trimmed.fq
+Log_Files       WTair1.logFile
+trim.e8944554   WTair1_S1_R1_001.fastq.trimmed.fq
+trim.o8944554   WTair2_S2_R1_001.fastq.trimmed.fq
+trim.pe8944554  WTair3_S3_R1_001.fastq.trimmed.fq
+trim.po8944554  WTeth1_S4_R1_001.fastq.trimmed.fq
+trim.qsh        WTeth2_S7_R1_001.fastq.trimmed.fq
+trims           WTeth3_S8_R1_001.fastq.trimmed.fq
+
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis>nano trim.e8944554
+TrimmomaticSE: Started with arguments: -threads 8 -phred33 -trimlog WTair1.logF$
+Using Long Clipping Sequence: 'AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTA'
+Using Long Clipping Sequence: 'AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC'
+ILLUMINACLIP: Using 0 prefix pairs, 2 forward/reverse sequences, 0 forward only$
+Exception in thread "Thread-0" java.lang.NullPointerException
+        at org.usadellab.trimmomatic.fastq.FastqParser.parseOne(FastqParser.jav$
+        at org.usadellab.trimmomatic.fastq.FastqParser.next(FastqParser.java:17$
+        at org.usadellab.trimmomatic.threading.ParserWorker.run(ParserWorker.ja$
+        at java.lang.Thread.run(Thread.java:745)
+Input Reads: 20530000 Surviving: 18847109 (91.80%) Dropped: 1682891 (8.20%)
+TrimmomaticSE: Completed successfully
+
+
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic/trims>nano trim.e8854189
+TrimmomaticSE: Started with arguments: -threads 8 -phred33 -trimlog WTair2.logF$
+Using Long Clipping Sequence: 'AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTA'
+Using Long Clipping Sequence: 'AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC'
+ILLUMINACLIP: Using 0 prefix pairs, 2 forward/reverse sequences, 0 forward only$
+Input Reads: 23114903 Surviving: 21247792 (91.92%) Dropped: 1867111 (8.08%)
+TrimmomaticSE: Completed successfully
 
 
 mkdir 3_fastqc (run command for each WT...fq file)
-fastqc -o . ../2_trimmomatic/WTair2_S2_R1_001.fastq.trimmed.fq
+fastqc -o . ../2_trimmomatic/WTair1_S1_R1_001.fastq.trimmed.fq
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/3_fastqc>ls
-WTair2_S2_R1_001.fastq.trimmed_fastqc.html  WTeth1_S4_R1_001.fastq.trimmed_fastqc.zip
-WTair2_S2_R1_001.fastq.trimmed_fastqc.zip   WTeth2_S7_R1_001.fastq.trimmed_fastqc.html
-WTair3_S3_R1_001.fastq.trimmed_fastqc.html  WTeth2_S7_R1_001.fastq.trimmed_fastqc.zip
-WTair3_S3_R1_001.fastq.trimmed_fastqc.zip   WTeth3_S8_R1_001.fastq.trimmed_fastqc.html
-WTeth1_S4_R1_001.fastq.trimmed_fastqc.html  WTeth3_S8_R1_001.fastq.trimmed_fastqc.zip
-
+WTair1_S1_R1_001.fastq.trimmed_fastqc.html  WTeth1_S4_R1_001.fastq.trimmed_fastqc.html
+WTair1_S1_R1_001.fastq.trimmed_fastqc.zip   WTeth1_S4_R1_001.fastq.trimmed_fastqc.zip
+WTair2_S2_R1_001.fastq.trimmed_fastqc.html  WTeth2_S7_R1_001.fastq.trimmed_fastqc.html
+WTair2_S2_R1_001.fastq.trimmed_fastqc.zip   WTeth2_S7_R1_001.fastq.trimmed_fastqc.zip
+WTair3_S3_R1_001.fastq.trimmed_fastqc.html  WTeth3_S8_R1_001.fastq.trimmed_fastqc.html
+WTair3_S3_R1_001.fastq.trimmed_fastqc.zip   WTeth3_S8_R1_001.fastq.trimmed_fastqc.zip
 
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data>ls
 6803genome.fa           WTair1_S1_R1_001.fastq  WTair3_S3_R1_001.fastq  WTeth2_S7_R1_001.fastq
@@ -104,13 +146,18 @@ ln -s /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/2_trimmomatic/WTair
 ln -s /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data/geneannotation.gff3.fa 
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>cp /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data/6803genome.fa .
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>ls
-6803_genome.1.bt2      geneannotation.gff3.fa
-6803_genome.2.bt2      map.qsh
-6803_genome.3.bt2      WTair2_S2_R1_001.fastq.trimmed.fq
-6803_genome.4.bt2      WTair3_S3_R1_001.fastq.trimmed.fq
-6803_genome.fa         WTeth1_S4_R1_001.fastq.trimmed.fq
-6803_genome.rev.1.bt2  WTeth2_S7_R1_001.fastq.trimmed.fq
-6803_genome.rev.2.bt2  WTeth3_S8_R1_001.fastq.trimmed.fq
+6803_genome.1.bt2       map4.qsh                           WTeth1_Folder
+6803_genome.2.bt2       map5.qsh                           WTeth1_Results
+6803_genome.3.bt2       map6.qsh                           WTeth1_S4_R1_001.fastq.trimmed.fq
+6803_genome.4.bt2       map.qsh                            WTeth2_Folder
+6803_genome.fa          WTair1_S1_R1_001.fastq.trimmed.fq  WTeth2_Results
+6803_genome.rev.1.bt2   WTair2_Folder                      WTeth2_S7_R1_001.fastq.trimmed.fq
+6803_genome.rev.2.bt2   WTair2_Results                     WTeth3_Folder
+geneannotation.gff3.fa  WTair2_S2_R1_001.fastq.trimmed.fq  WTeth3_Results
+gene_index              WTair3_Folder                      WTeth3_S8_R1_001.fastq.trimmed.fq
+map2.qsh                WTair3_Results
+map3.qsh                WTair3_S3_R1_001.fastq.trimmed.fq
+
 
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>module load bowtie2
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4_bowtie>bowtie2-build 6803genome.fa 6803_genome
@@ -297,6 +344,12 @@ New_WTair2_accepted_hits.bam  New_WTeth1_accepted_hits.bam  New_WTeth3_accepted_
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/5_htseq>module load samtools
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/5_htseq>samtools sort -n -o New_WTair2_sorted_byName.bam New_WTair2_accepted_hits.bam
 [bam_sort_core] merging from 9 files...
+
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/5_htseq>samtools sort -n -o New_WTair1_sorted_byName.bam New_WTair1_accepted_hits.bam
+[W::sam_read1] parse error at line 1
+[bam_sort_core] truncated file. Aborting.
+
+
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/5_htseq>ls -lh
 total 13G
 lrwxrwxrwx 1 callen72 users   77 Nov 21 19:50 geneannotation.gff3.fa -> /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/raw_data/geneannotation.gff3.fa
