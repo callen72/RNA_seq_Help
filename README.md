@@ -388,7 +388,7 @@ lrwxrwxrwx 1 callen72 users   77 Nov 21 19:50 geneannotation.gff3.fa -> /lustre/
 -rw-r--r-- 1 callen72 users 5.5G Nov 21 22:42 New_WTeth3_sorted_byName.sam
 
 
-htseq-count -s no -t gene -i Name New_WTair2_sorted_byName.sam geneannotation.gff3.fa > New_WTair2_counts2.txt 
+htseq-count -s no -t ID name -i Name New_WTair2_sorted_byName.sam geneannotation.gff3.fa > New_WTair2_counts2.txt 
 (run script for each .sam file)
 /lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/5_htseq>ls -lh
 total 34G
@@ -420,10 +420,14 @@ set the working directory with:
 setwd("~/RNA_Seq")
 
 A DESeqDataSet object was then created using the DESeqDataSetFromHTSeqCount command:
-sampleFiles <- grep("counts.txt",list.files("."),value=TRUE)
+sampleFiles <- grep("counts2.txt",list.files("."),value=TRUE)
 sampleCondition <- sub("(.*)\\d.*","\\1",sampleFiles)
-my_sampleTable <- data.frame(sampleName = sampleFiles, fileName = sampleFiles, condition = sampleCondition)
-my_data <- DESeqDataSetFromHTSeqCount(sampleTable = my_sampleTable, directory = ".", design = ~ condition)
+my_sampleTable <- data.frame(sampleName = WTAirFiles, fileName = WTAirFiles, condition = WTAir)
+my_data <- DESeqDataSetFromHTSeqCount(sampleTable = my_sampleTable, directory = ".",design = design, ignoreRank = FALSE)
+
+DESeqDataSetFromHTSeqCount(sampleTable, directory = ".", design, ignoreRank = FALSE, ...)
+  countData <- matrix(1:100,ncol=4)
+condition <- factor(c("A","A","B","B"))
 
 the main DESeq function was performed on the DESeqDataSet object:
 deseq_results = DESeq(my_data)
@@ -431,10 +435,10 @@ deseq_results = DESeq(my_data)
 To compare specific conditions such as WT air vs WT ethylene the following command was written:
 resultsNames(deseq_results)
 [1] "Intercept"          "conditionNew_WTair" "conditionNew_WTeth"
-condition1_condition2_results_table = results(deseq_results, contrast = c("condition","New_WTair", "New_WTeth"))
+condition1_condition2_results_table = results(deseq_results, contrast = c("condition","WTair", "WTeth"))
 
 This data set was then exported as excel spreadsheet with the command:
-write.csv(as.data.frame(condition1_condition2_results_table),file=(condition1_condition2_results.csv))
+write.csv(as.data.frame(condition1_condition2_results_table),file=("condition1_condition2_results.csv"))
 
 To produce an MA plot from the specified condition comparison:
 plotMA(condtion1_condition2_results_table, main="DESeq2", ylim=c(-10,10))
@@ -447,6 +451,12 @@ plotPCA(rld)
 
 -REDID MY HTSEQ COUNT TO SHOW THE NAME INSTEAD OF THE GENE ID.
 
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis>ls
+0_raw_data  1_fastqc  2_trimmomatic  3_fastqc  4_bowtie  5_htseq  6_CountReads
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis>mkdir 4b_bwa
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis>cd 4b_bwa/
+/lustre/projects/RNA_Seq_Data/SynRNA_Seq_Data/analysis/4b_bwa>module load bwa
 
-
+Index refernce genome.
+bwa index ../4_bowtie/6803_genome.fa .
 
